@@ -5,5 +5,9 @@
  */
 
 return [
-    // ...
+    'dummy_json' => [
+        'api_base_url' => env('DUMMY_API_BASE_URL', 'https://dummyjson.com'),
+        'api_username' => env('DUMMY_API_USERNAME', ''),
+        'api_password' => env('DUMMY_API_PASSWORD', ''),
+    ]
 ];
