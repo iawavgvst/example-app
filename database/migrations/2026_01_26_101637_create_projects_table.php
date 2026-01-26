@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 255);
             $table->foreignId('owner_id')->constrained('users');
             $table->boolean('is_active')->default(true);
+            $table->index('owner_id');
             $table->timestamps();
         });
     }
