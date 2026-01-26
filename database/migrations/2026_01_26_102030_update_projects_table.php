@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('projects', function (Blueprint $table) {
             $table->foreignId('assignee_id')->constrained('users');
             $table->date('deadline_date');
+            $table->index('assignee_id');
         });
     }
 
