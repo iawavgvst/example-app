@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
 /**
  * Проекты
  */
-Route::prefix('projects')->group(function () {
+Route::prefix('projects')->middleware('access')->group(function () {
     Route::get('/', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/', [ProjectController::class, 'store'])->name('projects.store');
