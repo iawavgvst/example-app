@@ -3,11 +3,21 @@
 @section('title', 'Проекты')
 
 @section('content')
-    <h1>Проекты</h1>
+    <h1>{{ __('Проекты') }}</h1>
+
+    <x-alert type="note">
+        {{ __('Здесь отображаются все проекты. Вы можете создавать новые проекты или редактировать существующие') }}.
+    </x-alert>
 
     @if(empty($projects))
-        Нет проектов.
+        <x-alert type="warning">
+            {{ __('В системе пока нет проектов') }}. <a href="{{ route('projects.create') }}">{{ __('Создайте проект') }}</a>.
+        </x-alert>
     @else
+        <x-alert type="success">
+            {{ __('Загружено проектов') }}: {{ count($projects) }}.
+        </x-alert>
+
         <div>
             @foreach($projects as $project)
                 <h2>
@@ -16,13 +26,13 @@
                     </a>
                 </h2>
                 <p>
-                    <strong>Владелец:</strong> {{ $project->owner_id }}
+                    <strong>{{ __('Владелец') }}:</strong> {{ $project->owner_id }}
                 </p>
                 <p>
-                    <strong>Ответственный:</strong> {{ $project->assignee_id ?? 'Не назначен' }}
+                    <strong>{{ __('Ответственный') }}:</strong> {{ $project->assignee_id ?? 'Не назначен' }}
                 </p>
                 <p>
-                    <strong>Статус проекта:</strong> {{ $project->is_active ? 'Активный' : 'Неактивный' }}
+                    <strong>{{ __('Статус') }}:</strong> {{ $project->is_active ? 'Активный' : 'Неактивный' }}
                 </p>
             @endforeach
         </div>

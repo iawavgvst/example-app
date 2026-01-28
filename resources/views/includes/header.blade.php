@@ -2,12 +2,12 @@
     <nav class="navbar">
         <div class="nav-item">
             <a href="{{ route('projects.index') }}">
-                Проекты
+                {{ __('Проекты') }}
             </a>
         </div>
         <div class="nav-item">
             <a href="{{ route('projects.create') }}">
-                Создать проект
+                {{ __('Создать проект') }}
             </a>
         </div>
         <div class="nav-item">
@@ -15,12 +15,12 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-danger">
-                        Выйти
+                        {{ __('Выйти') }}
                     </button>
                 </form>
             @else
                 <a href="{{ route('login') }}" class="btn btn-primary">
-                    Войти
+                    {{ __('Войти') }}
                 </a>
             @endauth
 

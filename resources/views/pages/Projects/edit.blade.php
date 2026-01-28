@@ -3,16 +3,16 @@
 @section('title', 'Редактировать')
 
 @section('content')
-    <h1>Форма редактирования</h1>
+    <h1>{{ __('Форма редактирования') }}</h1>
 
     <div>
         <a href="{{ route('projects.index') }}">
-            ← Вернуться к списку проектов
+            ← {{ __('Вернуться к списку проектов') }}
         </a>
     </div>
     <div>
         <a href="{{ route('projects.show', $projectData->id) }}">
-            ← Вернуться к проекту
+            ← {{ __('Вернуться к проекту') }}
         </a>
     </div>
 
@@ -22,28 +22,28 @@
             @method('put')
 
             <div class="form-group">
-                <label for="name">Название: </label>
+                <label for="name">{{ __('Название') }}: </label>
                 <input id="name" type="text" value="{{ $projectData->name }}">
             </div>
 
             <div class="form-group">
-                <label for="owner">Владелец: </label>
+                <label for="owner">{{ __('Владелец') }}: </label>
                 <input id="owner" type="text" value="{{ $projectData->owner_id }}">
             </div>
 
             <div class="form-group">
-                <label for="assignee">Ответственный: </label>
+                <label for="assignee">{{ __('Ответственный') }}: </label>
                 <input id="assignee" type="text" value="{{ $projectData->assignee_id ?? 'Не назначен' }}">
             </div>
 
             <div class="form-group">
-                <label for="isActive">Статус: </label>
+                <label for="isActive">{{ __('Статус') }}: </label>
                 <input id="isActive" type="text" value="{{ $projectData->is_active ? 'Активный' : 'Неактивный' }}">
             </div>
 
             <div class="btn">
                 <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">
-                    Обновить
+                    {{ __('Обновить') }}
                 </button>
             </div>
 
