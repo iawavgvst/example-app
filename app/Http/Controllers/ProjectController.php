@@ -3,17 +3,59 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
+    /**
+     * Данные для двух проектов
+     */
+    private function getProjects(): array
+    {
+        return [
+            (object) [
+                'id' => 1,
+                'name' => 'Разработка маркетинговой стратегии',
+                'owner_id' => 1,
+                'assignee_id' => 2,
+                'is_active' => true,
+            ],
+            (object) [
+                'id' => 2,
+                'name' => 'Создание дизайна',
+                'owner_id' => 3,
+                'assignee_id' => null,
+                'is_active' => false,
+            ],
+        ];
+    }
+
+    /**
+     * Найти проект по его ID
+     */
+    private function findProjectById($id): ?object
+    {
+        $projects = $this->getProjects();
+
+        foreach ($projects as $project) {
+            if ($project->id == $id) {
+                return $project;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Вывод списка всех проектов
      *
      * Метод GET: /projects
      */
-    public function index(): string
+    public function index(): View
     {
-        return "Список всех проектов";
+        $projects = $this->getProjects();
+
+        return view('pages.projects.index', compact('projects'));
     }
 
     /**
@@ -21,9 +63,15 @@ class ProjectController extends Controller
      *
      * Метод GET: /projects/{project}
      */
-    public function show($project): string
+    public function show($project): View
     {
-        return "Проект N{$project}";
+        $projectData = $this->findProjectById($project);
+
+        if (!$projectData) {
+            abort(404, 'Проект не найден');
+        }
+
+        return view('pages.projects.show', compact('projectData'));
     }
 
     /**
@@ -31,9 +79,9 @@ class ProjectController extends Controller
      *
      * Метод GET: /projects/create
      */
-    public function create(): string
+    public function create(): View
     {
-        return "Создать проект";
+        return view('pages.projects.create');
     }
 
     /**
@@ -51,9 +99,15 @@ class ProjectController extends Controller
      *
      * Метод GET: /projects/{project}/edit
      */
-    public function edit($project): string
+    public function edit($project): View
     {
-        return "Редактировать проект N{$project}";
+        $projectData = $this->findProjectById($project);
+
+        if (!$projectData) {
+            abort(404, 'Проект не найден');
+        }
+
+        return view('pages.projects.edit', compact('projectData'));
     }
 
     /**
