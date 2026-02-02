@@ -1,7 +1,7 @@
 <div>
     <nav class="navbar">
         <div class="nav-item">
-            <a href="{{ route('projects.index') }}">
+            <a href="{{ route('projects.index', ['access' => 'yes']) }}">
                 {{ __('Проекты') }}
             </a>
         </div>

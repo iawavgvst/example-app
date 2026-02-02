@@ -10,7 +10,7 @@
     </x-alert>
 
     <div>
-        <a href="{{ route('projects.index') }}">
+        <a href="{{ route('projects.index', ['access' => 'yes']) }}">
             ← {{ __('Вернуться к списку проектов') }}
         </a>
     </div>
@@ -21,22 +21,47 @@
 
             <div class="form-group">
                 <label for="name">{{ __('Название') }}: </label>
-                <input id="name" type="text" placeholder="Название проекта">
+                <input value="{{ old('name') }}" name="name" id="name" type="text" placeholder="Название проекта"
+                       required>
+                @error('name')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group">
-                <label for="owner">{{ __('Владелец') }}: </label>
-                <input id="owner" type="text" placeholder="Владелец проекта">
+                <label for="owner_id">{{ __('Владелец') }}: </label>
+                <input value="{{ old('owner_id') }}" name="owner_id" id="owner_id" type="number"
+                       placeholder="Владелец проекта" required min="1">
+                @error('owner_id')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group">
-                <label for="assignee">{{ __('Ответственный') }}: </label>
-                <input id="assignee" type="text" placeholder="Отвпетственный проекта">
+                <label for="assignee_id">{{ __('Ответственный') }}: </label>
+                <input value="{{ old('assignee_id') }}" name="assignee_id" id="assignee_id" type="number"
+                       placeholder="Ответственный по проекту" min="1">
+                @error('assignee_id')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="form-group">
-                <label for="isActive">{{ __('Статус') }}: </label>
-                <input id="isActive" type="text" placeholder="Статус проекта">
+                <label for="is_active">{{ __('Статус') }}:
+                    <input type="hidden" name="is_active" id="is_active" value="0">
+                    <input name="is_active" value="1" id="is_active"
+                           type="checkbox" {{ old('is_active', true) ? 'checked' : '' }}>
+                    {{ __('Активный проект') }}
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="deadline_date">{{ __('Дедлайн') }}: </label>
+                <input value="{{ old('deadline_date', date('d-m-Y')) }}" name="deadline_date" id="deadline_date"
+                       type="date" required>
+                @error('deadline_date')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="btn">

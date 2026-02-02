@@ -2,50 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
-    /**
-     * Данные для двух проектов
-     */
-    private function getProjects(): array
-    {
-        return [
-            (object) [
-                'id' => 1,
-                'name' => 'Разработка маркетинговой стратегии',
-                'owner_id' => 1,
-                'assignee_id' => 2,
-                'is_active' => true,
-            ],
-            (object) [
-                'id' => 2,
-                'name' => 'Создание дизайна',
-                'owner_id' => 3,
-                'assignee_id' => null,
-                'is_active' => false,
-            ],
-        ];
-    }
-
-    /**
-     * Найти проект по его ID
-     */
-    private function findProjectById($id): ?object
-    {
-        $projects = $this->getProjects();
-
-        foreach ($projects as $project) {
-            if ($project->id == $id) {
-                return $project;
-            }
-        }
-
-        return null;
-    }
-
     /**
      * Вывод списка всех проектов
      *
@@ -53,7 +16,7 @@ class ProjectController extends Controller
      */
     public function index(): View
     {
-        $projects = $this->getProjects();
+        $projects = Project::all();
 
         return view('pages.projects.index', compact('projects'));
     }
@@ -63,15 +26,9 @@ class ProjectController extends Controller
      *
      * Метод GET: /projects/{project}
      */
-    public function show($project): View
+    public function show(Project $project): View
     {
-        $projectData = $this->findProjectById($project);
-
-        if (!$projectData) {
-            abort(404, 'Проект не найден');
-        }
-
-        return view('pages.projects.show', compact('projectData'));
+        return view('pages.projects.show', compact('project'));
     }
 
     /**
@@ -89,8 +46,18 @@ class ProjectController extends Controller
      *
      * Метод POST: /projects
      */
-    public function store(): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'owner_id' => 'required|integer|min:1',
+            'assignee_id' => 'nullable|integer|min:1',
+            'deadline_date' => 'required|date',
+            'is_active' => 'boolean',
+        ]);
+
+        Project::create($validated);
+
         return redirect()->route('projects.index');
     }
 
@@ -99,15 +66,9 @@ class ProjectController extends Controller
      *
      * Метод GET: /projects/{project}/edit
      */
-    public function edit($project): View
+    public function edit(Project $project): View
     {
-        $projectData = $this->findProjectById($project);
-
-        if (!$projectData) {
-            abort(404, 'Проект не найден');
-        }
-
-        return view('pages.projects.edit', compact('projectData'));
+        return view('pages.projects.edit', compact('project'));
     }
 
     /**
@@ -115,8 +76,18 @@ class ProjectController extends Controller
      *
      * Метод PUT: /projects/{project}
      */
-    public function update($project): RedirectResponse
+    public function update(Request $request, Project $project): RedirectResponse
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'owner_id' => 'required|integer|min:1',
+            'assignee_id' => 'nullable|integer|min:1',
+            'deadline_date' => 'required|date',
+            'is_active' => 'boolean',
+        ]);
+
+        $project->update($validated);
+
         return redirect()->route('projects.show', $project);
     }
 
@@ -125,8 +96,10 @@ class ProjectController extends Controller
      *
      * Метод DELETE: /projects/{project}
      */
-    public function destroy(): RedirectResponse
+    public function destroy(Project $project): RedirectResponse
     {
+        $project->delete();
+
         return redirect()->route('projects.index');
     }
 }
