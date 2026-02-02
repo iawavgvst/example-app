@@ -9,9 +9,10 @@
         {{ __('Здесь отображаются все проекты. Вы можете создавать новые проекты или редактировать существующие') }}.
     </x-alert>
 
-    @if(empty($projects))
+    @if($projects->isEmpty())
         <x-alert type="warning">
-            {{ __('В системе пока нет проектов') }}. <a href="{{ route('projects.create') }}">{{ __('Создайте проект') }}</a>.
+            {{ __('В системе пока нет проектов') }}. <a
+                href="{{ route('projects.create') }}">{{ __('Создайте проект') }}</a>.
         </x-alert>
     @else
         <x-alert type="success">
@@ -33,6 +34,9 @@
                 </p>
                 <p>
                     <strong>{{ __('Статус') }}:</strong> {{ $project->is_active ? 'Активный' : 'Неактивный' }}
+                </p>
+                <p>
+                    <strong>{{ __('Дедлайн') }}:</strong> {{ $project->deadline_date->format('d-m-Y') }}
                 </p>
             @endforeach
         </div>
