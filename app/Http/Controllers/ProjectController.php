@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Project\ProjectStoreRequest;
+use App\Http\Requests\Project\ProjectUpdateRequest;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -46,19 +47,14 @@ class ProjectController extends Controller
      *
      * Метод POST: /projects
      */
-    public function store(Request $request): RedirectResponse
+    public function store(ProjectStoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'owner_id' => 'required|integer|min:1',
-            'assignee_id' => 'nullable|integer|min:1',
-            'deadline_date' => 'required|date',
-            'is_active' => 'boolean',
-        ]);
+        $data = $request->validated();
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
 
-        Project::create($validated);
+        Project::create($data);
 
-        return redirect()->route('projects.index');
+        return redirect()->route('projects.index', ['access' => 'yes']);
     }
 
     /**
@@ -76,17 +72,12 @@ class ProjectController extends Controller
      *
      * Метод PUT: /projects/{project}
      */
-    public function update(Request $request, Project $project): RedirectResponse
+    public function update(ProjectUpdateRequest $request, Project $project): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'owner_id' => 'required|integer|min:1',
-            'assignee_id' => 'nullable|integer|min:1',
-            'deadline_date' => 'required|date',
-            'is_active' => 'boolean',
-        ]);
+        $data = $request->validated();
+        $data['is_active'] = $request->has('is_active') ? 1 : 0;
 
-        $project->update($validated);
+        $project->update($data);
 
         return redirect()->route('projects.show', $project);
     }
@@ -100,7 +91,7 @@ class ProjectController extends Controller
     {
         $project->delete();
 
-        return redirect()->route('projects.index');
+        return redirect()->route('projects.index', ['access' => 'yes']);
     }
 }
 

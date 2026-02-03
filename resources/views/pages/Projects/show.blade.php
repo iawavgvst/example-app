@@ -40,5 +40,20 @@
         <a href="{{ route('projects.edit', $project->id) }}">
             {{ __('Редактировать') }}
         </a>
+
+        <form action="{{ route('projects.destroy', $project->id) }}" method="post">
+            @csrf
+            @method('delete')
+            <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Вы уверены, что хотите удалить проект {{ $project->name }}? Это действие нельзя отменить.')">
+            {{ __('Удалить проект') }}
+            </button>
+        </form>
     </div>
 @endsection
+
+<style>
+    .btn-danger {
+        margin-top: 5px;
+    }
+</style>
