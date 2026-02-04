@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Project\ProjectStoreRequest;
 use App\Http\Requests\Project\ProjectUpdateRequest;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -17,7 +18,7 @@ class ProjectController extends Controller
      */
     public function index(): View
     {
-        $projects = Project::all();
+        $projects = Project::orderBy('created_at')->get();
 
         return view('pages.projects.index', compact('projects'));
     }
@@ -39,7 +40,9 @@ class ProjectController extends Controller
      */
     public function create(): View
     {
-        return view('pages.projects.create');
+        $users = User::all();
+
+        return view('pages.projects.create', compact('users'));
     }
 
     /**
@@ -64,7 +67,9 @@ class ProjectController extends Controller
      */
     public function edit(Project $project): View
     {
-        return view('pages.projects.edit', compact('project'));
+        $users = User::all();
+
+        return view('pages.projects.edit', compact('project', 'users'));
     }
 
     /**
