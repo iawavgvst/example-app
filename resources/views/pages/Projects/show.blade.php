@@ -23,13 +23,18 @@
 
     <div>
         <p>
-            <strong>{{ __('Владелец') }}:</strong> {{ $project->owner_id }}
+            <strong>{{ __('Владелец') }}:</strong> {{ $project->owner->username }}
         </p>
         <p>
-            <strong>{{ __('Ответственный') }}:</strong> {{ $project->assignee_id ?? 'Не назначен' }}
+            <strong>{{ __('Ответственный') }}:</strong> {{ $project->assignee->username ?? 'Не назначен' }}
         </p>
         <p>
-            <strong>{{ __('Статус') }}:</strong> {{ $project->is_active ? 'Активный' : 'Неактивный' }}
+            <strong>{{ __('Статус') }}:</strong>
+            @if($project->is_active)
+                <span style="color: green;">● Активный</span>
+            @else
+                <span style="color: gray;">● Неактивный</span>
+            @endif
         </p>
         <p>
             <strong>{{ __('Дедлайн') }}:</strong> {{ $project->deadline_date->format('d-m-Y') }}
@@ -37,18 +42,22 @@
     </div>
 
     <div>
-        <a href="{{ route('projects.edit', $project->id) }}">
-            {{ __('Редактировать') }}
-        </a>
+        @can('update', $project)
+            <a href="{{ route('projects.edit', $project->id) }}">
+                {{ __('Редактировать') }}
+            </a>
+        @endcan
 
-        <form action="{{ route('projects.destroy', $project->id) }}" method="post">
-            @csrf
-            @method('delete')
-            <button type="submit" class="btn btn-danger"
-                    onclick="return confirm('Вы уверены, что хотите удалить проект {{ $project->name }}? Это действие нельзя отменить.')">
-            {{ __('Удалить проект') }}
-            </button>
-        </form>
+        @can('delete', $project)
+            <form action="{{ route('projects.destroy', $project->id) }}" method="post">
+                @csrf
+                @method('delete')
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Вы уверены, что хотите удалить проект {{ $project->name }}? Это действие нельзя отменить.')">
+                    {{ __('Удалить проект') }}
+                </button>
+            </form>
+        @endcan
     </div>
 @endsection
 

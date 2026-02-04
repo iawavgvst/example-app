@@ -24,6 +24,7 @@ class ProjectUpdateRequest extends FormRequest
             'owner_id' => 'required|exists:users,id',
             'assignee_id' => 'required|exists:users,id',
             'deadline_date' => 'required',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -35,11 +36,12 @@ class ProjectUpdateRequest extends FormRequest
         return [
             'name.required' => 'Название проекта обязательно для заполнения.',
             'name.max' => 'Название проекта не должно превышать 100 символов.',
+
             'owner_id.required' => 'Владелец проекта обязателен для заполнения.',
-            'assignee_id.required' => 'Ответственный по проекту обязателен для заполнения',
             'owner_id.exists' => 'Указанный владелец не существует.',
+
+            'assignee_id.required' => 'Ответственный по проекту обязателен для заполнения',
             'assignee_id.exists' => 'Указанный ответственный не существует.',
-            'deadline_date.required' => 'Дата завершения проекта обязательна для заполнения.',
         ];
     }
 }

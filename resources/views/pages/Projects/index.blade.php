@@ -27,13 +27,25 @@
                     </a>
                 </h2>
                 <p>
-                    <strong>{{ __('Владелец') }}:</strong> {{ $project->owner_id }}
+                    <strong>{{ __('Владелец') }}:</strong> {{ $project->owner->username }}
                 </p>
                 <p>
-                    <strong>{{ __('Ответственный') }}:</strong> {{ $project->assignee_id ?? 'Не назначен' }}
+                    <strong>{{ __('Ответственный') }}:</strong> {{ $project->assignee->username }}
                 </p>
+                @if($project->owner_id == auth()->id())
+                    <span style="color: darkorange;">Ваш проект.</span>
+                @endif
+
+                @if($project->assignee_id == auth()->id())
+                    <span style="color: darkorange;">Вы ответственный.</span>
+                @endif
                 <p>
-                    <strong>{{ __('Статус') }}:</strong> {{ $project->is_active ? 'Активный' : 'Неактивный' }}
+                    <strong>{{ __('Статус') }}:</strong>
+                    @if($project->is_active)
+                        <span style="color: green;">● Активный</span>
+                    @else
+                        <span style="color: gray;">● Неактивный</span>
+                    @endif
                 </p>
                 <p>
                     <strong>{{ __('Дедлайн') }}:</strong> {{ $project->deadline_date->format('d-m-Y') }}

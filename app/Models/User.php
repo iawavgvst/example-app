@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -65,5 +66,35 @@ class User extends Authenticatable
             });
 
         return $query;
+    }
+
+    /**
+     * Проекты, которыми владеет пользователь
+     *
+     * @return HasMany
+     */
+    public function ownedProjects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'owner_id');
+    }
+
+    /**
+     * Проекты, за которые пользователь несет ответственность
+     *
+     * @return HasMany
+     */
+    public function assignedProjects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'assignee_id');
+    }
+
+    /**
+     * Проверка, является ли пользователь администратором
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }

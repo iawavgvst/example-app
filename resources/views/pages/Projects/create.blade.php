@@ -29,8 +29,19 @@
 
             <div class="form-group">
                 <label for="owner_id">{{ __('Владелец') }}: </label>
-                <input value="{{ old('owner_id') }}" name="owner_id" id="owner_id" type="number"
-                       placeholder="Владелец проекта">
+                <select name="owner_id" id="owner_id" class="form-control">
+                    <option value="">Выберите владельца</option>
+                    @if($users->isNotEmpty())
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ old('owner_id') == $user->id ? 'selected' : '' }}>
+                                {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
                 @error('owner_id')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -38,8 +49,19 @@
 
             <div class="form-group">
                 <label for="assignee_id">{{ __('Ответственный') }}: </label>
-                <input value="{{ old('assignee_id') }}" name="assignee_id" id="assignee_id" type="number"
-                       placeholder="Ответственный по проекту">
+                <select name="assignee_id" id="assignee_id" class="form-control">
+                    <option value="">Выберите ответственного</option>
+                    @if($users->isNotEmpty())
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ old('assignee_id') == $user->id ? 'selected' : '' }}>
+                                {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
                 @error('assignee_id')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -55,7 +77,7 @@
 
             <div class="form-group">
                 <label for="deadline_date">{{ __('Дедлайн') }}: </label>
-                <input value="{{ old('deadline_date') }}" name="deadline_date" id="deadline_date"
+                <input value="{{ old('deadline_date', date('Y-m-d')) }}" name="deadline_date" id="deadline_date"
                        type="date">
                 @error('deadline_date')
                 <div class="text-danger">{{ $message }}</div>

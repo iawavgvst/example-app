@@ -31,7 +31,20 @@
 
             <div class="form-group">
                 <label for="owner_id">{{ __('Владелец') }}: </label>
-                <input name="owner_id" id="owner_id" type="number" value="{{ old('owner_id', $project->owner_id) }}">
+                <select name="owner_id" id="owner_id" class="form-control">
+                    <option value="">Выберите владельца</option>
+                    @if($users->isNotEmpty())
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}"
+                                {{ old('owner_id', $project->owner_id) == $user->id ? 'selected' : '' }}>
+                                {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
                 @error('owner_id')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -39,8 +52,20 @@
 
             <div class="form-group">
                 <label for="assignee_id">{{ __('Ответственный') }}: </label>
-                <input name="assignee_id" id="assignee_id" type="number"
-                       value="{{ old('assignee_id', $project->assignee_id) ?? 'Не назначен' }}">
+                <select name="assignee_id" id="assignee_id" class="form-control">
+                    <option value="">Выберите ответственного</option>
+                    @if($users->isNotEmpty())
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}"
+                                {{ old('assignee_id', $project->assignee_id) == $user->id ? 'selected' : '' }}>
+                                {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
+                            </option>
+                        @endforeach
+                    @endif
+                </select>
                 @error('assignee_id')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror
