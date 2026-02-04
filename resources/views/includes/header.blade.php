@@ -5,11 +5,13 @@
                 {{ __('Проекты') }}
             </a>
         </div>
-        <div class="nav-item">
-            <a href="{{ route('projects.create') }}">
-                {{ __('Создать проект') }}
-            </a>
-        </div>
+        @can('create', App\Models\Project::class)
+            <div class="nav-item">
+                <a href="{{ route('projects.create') }}">
+                    {{ __('Создать проект') }}
+                </a>
+            </div>
+        @endcan
         <div class="nav-item">
             @auth
                 <form method="POST" action="{{ route('logout') }}">
@@ -18,12 +20,7 @@
                         {{ __('Выйти') }}
                     </button>
                 </form>
-            @else
-                <a href="{{ route('login') }}" class="btn btn-primary">
-                    {{ __('Войти') }}
-                </a>
             @endauth
-
         </div>
     </nav>
 </div>

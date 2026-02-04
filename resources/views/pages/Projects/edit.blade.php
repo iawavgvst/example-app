@@ -38,6 +38,9 @@
                             <option value="{{ $user->id }}"
                                 {{ old('owner_id', $project->owner_id) == $user->id ? 'selected' : '' }}>
                                 {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
                             </option>
                         @endforeach
                     @endif
@@ -56,6 +59,9 @@
                             <option value="{{ $user->id }}"
                                 {{ old('assignee_id', $project->assignee_id) == $user->id ? 'selected' : '' }}>
                                 {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
                             </option>
                         @endforeach
                     @endif

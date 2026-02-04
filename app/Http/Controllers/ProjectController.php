@@ -7,6 +7,7 @@ use App\Http\Requests\Project\ProjectUpdateRequest;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -18,6 +19,8 @@ class ProjectController extends Controller
      */
     public function index(): View
     {
+        Gate::authorize('viewAny', Project::class);
+
         $projects = Project::orderBy('created_at')->get();
 
         return view('pages.projects.index', compact('projects'));
@@ -30,6 +33,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project): View
     {
+        Gate::authorize('view', $project);
+
         return view('pages.projects.show', compact('project'));
     }
 
@@ -40,6 +45,8 @@ class ProjectController extends Controller
      */
     public function create(): View
     {
+        Gate::authorize('create', Project::class);
+
         $users = User::all();
 
         return view('pages.projects.create', compact('users'));
@@ -52,6 +59,8 @@ class ProjectController extends Controller
      */
     public function store(ProjectStoreRequest $request): RedirectResponse
     {
+        Gate::authorize('create', Project::class);
+
         $data = $request->validated();
         $data['is_active'] = $request->has('is_active') ? 1 : 0;
 
@@ -67,6 +76,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project): View
     {
+        Gate::authorize('update', $project);
+
         $users = User::all();
 
         return view('pages.projects.edit', compact('project', 'users'));
@@ -79,6 +90,8 @@ class ProjectController extends Controller
      */
     public function update(ProjectUpdateRequest $request, Project $project): RedirectResponse
     {
+        Gate::authorize('update', $project);
+
         $data = $request->validated();
         $data['is_active'] = $request->has('is_active') ? 1 : 0;
 
@@ -94,6 +107,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project): RedirectResponse
     {
+        Gate::authorize('delete', $project);
+
         $project->delete();
 
         return redirect()->route('projects.index', ['access' => 'yes']);

@@ -29,12 +29,15 @@
 
             <div class="form-group">
                 <label for="owner_id">{{ __('Владелец') }}: </label>
-                <select name="owner_id" id="owner_id" class="form-control" required>
+                <select name="owner_id" id="owner_id" class="form-control">
                     <option value="">Выберите владельца</option>
                     @if($users->isNotEmpty())
                         @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ old('owner_id') == $user->id ? 'selected' : '' }}>
                                 {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
                             </option>
                         @endforeach
                     @endif
@@ -52,6 +55,9 @@
                         @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ old('assignee_id') == $user->id ? 'selected' : '' }}>
                                 {{ $user->username }}
+                                @if($user->id == auth()->id())
+                                    (Вы)
+                                @endif
                             </option>
                         @endforeach
                     @endif

@@ -87,4 +87,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class, 'assignee_id');
     }
+
+    /**
+     * Проверка, является ли пользователь администратором
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

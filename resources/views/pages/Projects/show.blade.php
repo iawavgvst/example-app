@@ -42,18 +42,22 @@
     </div>
 
     <div>
-        <a href="{{ route('projects.edit', $project->id) }}">
-            {{ __('Редактировать') }}
-        </a>
+        @can('update', $project)
+            <a href="{{ route('projects.edit', $project->id) }}">
+                {{ __('Редактировать') }}
+            </a>
+        @endcan
 
-        <form action="{{ route('projects.destroy', $project->id) }}" method="post">
-            @csrf
-            @method('delete')
-            <button type="submit" class="btn btn-danger"
-                    onclick="return confirm('Вы уверены, что хотите удалить проект {{ $project->name }}? Это действие нельзя отменить.')">
-            {{ __('Удалить проект') }}
-            </button>
-        </form>
+        @can('delete', $project)
+            <form action="{{ route('projects.destroy', $project->id) }}" method="post">
+                @csrf
+                @method('delete')
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Вы уверены, что хотите удалить проект {{ $project->name }}? Это действие нельзя отменить.')">
+                    {{ __('Удалить проект') }}
+                </button>
+            </form>
+        @endcan
     </div>
 @endsection
 

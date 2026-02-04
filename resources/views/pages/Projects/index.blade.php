@@ -32,6 +32,13 @@
                 <p>
                     <strong>{{ __('Ответственный') }}:</strong> {{ $project->assignee->username }}
                 </p>
+                @if($project->owner_id == auth()->id())
+                    <span style="color: darkorange;">Ваш проект.</span>
+                @endif
+
+                @if($project->assignee_id == auth()->id())
+                    <span style="color: darkorange;">Вы ответственный.</span>
+                @endif
                 <p>
                     <strong>{{ __('Статус') }}:</strong>
                     @if($project->is_active)
