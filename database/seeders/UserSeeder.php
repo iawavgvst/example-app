@@ -25,5 +25,23 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'created_at' => DB::raw('NOW()'),
         ]);
+
+        /**
+         * Для тестовых дополнительных пользователей.
+         */
+
+        DB::table('users')->insert([
+            'username' => 'assignee',
+            'password' => Hash::make('assignee'),
+            'role' => 'assignee',
+            'created_at' => DB::raw('NOW()'),
+        ]);
+
+        DB::table('users')->insert([
+            'username' => 'owner',
+            'password' => Hash::make('owner'),
+            'role' => 'owner',
+            'created_at' => DB::raw('NOW()'),
+        ]);
     }
 }
