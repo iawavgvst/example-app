@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Auth;
 
 class DevController extends Controller
 {
@@ -41,7 +42,7 @@ class DevController extends Controller
         $faker = Faker::create();
 
         for($i = 0; $i < 5; $i++) {
-            Project::create([
+            $projects = Project::create([
                 'name' => $faker->sentence(3),
                 'owner_id' => $faker->numberBetween(1, 3),
                 'is_active' => $faker->boolean(),
@@ -50,7 +51,7 @@ class DevController extends Controller
             ]);
         }
 
-        return 'Вы добавили 5 проектов';
+        return $projects;
     }
 
     /**
@@ -96,5 +97,51 @@ class DevController extends Controller
         ]);
 
         return $project;
+    }
+
+    /**
+     * Получение 3-х последних проектов
+     */
+    public function getMyLatestThree()
+    {
+        if (Auth::check()) {
+            $projects = Project::query()
+                ->where('owner_id', Auth::id())
+                ->latest()
+                ->take(3)
+                ->get();
+        } else {
+            $projects = Project::query()
+                ->latest()
+                ->take(3)
+                ->get();
+        }
+
+        return $projects;
+    }
+
+    /**
+     * Список пользователей и кол-во проектов у них
+     */
+    public function usersProjects()
+    {
+        $users = User::query()
+            ->select('username')
+            ->withCount('ownedProjects')
+            ->get();
+
+        return $users;
+    }
+
+    /**
+     * Кол-во проектов с истекшим дедлайном
+     */
+    public function getExpiredProjectsCount()
+    {
+        $projects = Project::query()
+            ->where('deadline_date', '<', now())
+            ->count();
+
+        return $projects;
     }
 }

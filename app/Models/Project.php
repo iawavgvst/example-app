@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -46,5 +47,17 @@ class Project extends Model
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assignee_id');
+    }
+
+    /**
+     * Для фильтрации проектов с истекшим дедлайном
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopedExpired(Builder $query): Builder
+    {
+        return $query->where('deadline_date', '<', now());
     }
 }
